@@ -19,6 +19,9 @@
   "homepage": "https://github.com/athiels/SFL19#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "mongoose": "^5.3.6"
+    "express": "^4.16.4",
+    "fs": "0.0.1-security",
+    "mongoose": "^5.3.6",
+    "path": "^0.12.7"
   }
 }
