@@ -1,0 +1,27 @@
+<label for="labelsFromUser">Labels van</label>
+<select type="text" id="labelsFromUser"></select>
+
+<script>
+
+var user = getUser();
+
+function getUsers() {
+	$.getJSON( "/api/user/getall", function( data ) {	
+		if (!data) { addNotification("De gebruikers konden niet opgehaald worden."); return; }
+
+		$("#labelsFromUser").append('<option value="all">Alle gebruikers</option>');
+		for (i=0;i<data.length;i++) {
+			var thisUser = "";
+			if (data[i].id == user.id) thisUser = "selected=selected";
+			$("#labelsFromUser").append('<option value="'+data[i].id+'" '+thisUser+'>'+data[i].firstname + " " + data[i].lastname+'</option>');
+		}
+		getLabels();
+	});
+}
+getUsers();
+
+$('body').on('change', '#labelsFromUser', function() {
+	getLabels($(this).val());
+});
+
+</script>

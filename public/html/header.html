@@ -1,0 +1,116 @@
+<header>
+	<div class="compact_small">
+		<div class="brandimg left" onclick="loadContent('home')">
+			<img src="../img/SFL-logo.png">
+		</div>
+		<div class="container demo-3 right" style="display: none;">
+			<div id="dl-menu" class="dl-menuwrapper">
+				<button class="dl-trigger">Open Menu</button>
+				<ul class="dl-menu">
+					<li><a id="guests">		Aantal gasten</a></li>
+					<li><a id="competition">Competitie</a></li>
+				</ul>
+			</div><!-- /dl-menuwrapper -->
+		</div><!-- /container -->		
+
+		<div class="right">
+			<ul class="navi">
+				<li onclick="loadContent('guests')">Aantal gasten</li>
+				<li onclick="loadContent('competition')">Competitie</li>
+			</ul>
+		</div>
+	</div>	
+</header>
+
+
+<script>
+
+function loadContent(page, refresh) {
+
+	if (!page) {
+		page = window.location.hash.substr(1);
+	}
+
+	if (page == "login") {
+		if (!userIsLoggedIn()) {
+			$( "#content" ).load( "html/user/login.html" );
+			$( "#header" ).hide();
+			$( "#footer" ).hide();
+		} else {
+			location.href = "/#home";
+			location.reload();
+		}
+	} else if (userIsLoggedIn()) {
+		$( "#header" ).show();
+		$( "#footer" ).show();
+
+		switch (page) {
+			case "":
+			case "home":	
+				page = "home"		
+				loadPage("home");
+				break;
+			case "guests":		
+				loadPage("guests");
+				break;
+			case "competition":		
+				loadPage("competition");
+				break;
+			case "competition_new":		
+				loadPage("competition_new");
+				break;				
+
+			default:
+				$( "#content" ).load( "home.html" );
+				break;
+		}
+	} else {
+		$( "#mainNav" ).hide();
+		$( "#content" ).load( "html/user/login.html" );
+	}
+
+	showLoggedInUser();
+
+	location.href = "#"+page;
+	if (refresh) {
+		location.reload();
+	}
+}
+loadContent();
+
+function loadPage(page) {
+	$( "#content" ).load( "html/"+page+".html", function() {
+		enlargeContentDiv();
+	});
+}
+
+function showLoggedInUser() {
+	if (userIsLoggedIn()) {
+		var user = getUser();
+		if (user.admin) {
+			$("#admin").html('<i class="fas fa-user-cog"></i> Admin');
+		}
+		$("#user").html('<i class="fas fa-user"></i> ' + user.firstname + " " + user.lastname);
+		$("#logout").html('<i class="fas fa-sign-out-alt" title="Afmelden" onclick="logout();"></i>');
+	}
+}
+
+$('body').on('click', 'header a', function() {
+	loadContent($(this).attr('id'), true);
+});
+
+$(window).bind('hashchange', function() {
+	loadContent("", true);
+});
+
+function adminPage() {
+	if (!userIsLoggedIn() || !userIsAdmin()) {
+		loadPage("misc/unauthorized");
+	}
+}
+ 	
+function enlargeContentDiv() {
+	$("#content").height($("#content").height()+50);
+}
+
+</script>

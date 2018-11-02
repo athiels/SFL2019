@@ -1,0 +1,81 @@
+<div id="competition" class="compact_small headerSpace">
+	<h1 class="containerTitle">SFL Competitie</h1>
+
+	<div id="competition_main">
+		<div class="grid_6">
+			<div class="newArtist">
+				<h2>
+					Artiesten			
+					<button onclick="loadContent('competition_new')" class="button_highlight right" style="margin-top: -5px;">Nieuwe artiest toevoegen</button>
+				</h2>
+				<div id="foundArtistsList"></div>
+			</div>
+		</div>
+
+		<div class="grid_6" style="border-left: 2px silver solid; height: 900px;" >
+			
+		</div>
+	</div>
+	<br class="clear">
+	<div id="notifications" class="dark margin_top-25"></div>
+</div>
+
+
+<script type="text/javascript">
+
+	function getFoundArtists() {
+		$.getJSON( "/api/artist/found", function( data ) {	
+			if (data.err) addNotification(err, "failed");
+			if (data.foundartists) {
+				foundartists = data.foundartists;
+				console.log(foundartists);
+				if (foundartists.length) {
+					
+				} else {
+					$("#foundArtistsList").html("<p><br><br>Er zijn nog geen artiesten gevonden...<br><br>Heb jij een artiest gevonden op onze puzzel? <br>Klik dan op 'Nieuwe artiest toevoegen'");
+				}
+			}
+		});	
+	}
+	getFoundArtists();
+	
+	
+	function getGuests() {
+		var user = getUser();
+	
+		$("#guest_adults").val(user.guest_adults);
+		$("#guest_children").val(user.guest_children);
+	}
+	getGuests();
+	
+    function saveGuests() {
+	    var json = {
+	    	"logincode": user.logincode,
+	    	"guest_adults": $("#guest_adults").val() || 0,
+	    	"guest_children": $("#guest_children").val() || 0
+	    }
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/user/update',
+			data: JSON.stringify(json),
+			contentType: "application/json",
+			dataType: 'json'
+		})
+		.done(function(data) {		
+			if (data.success) {
+				getUserInfo(user.logincode, function() {
+					//location.reload();
+					getGuests();
+					addNotification('Aantal gasten succesvol opgeslagen', "success");
+				});
+			} else {
+				addNotification('Aantal gasten kon momenteel niet worden opgeslagen, probeer nogmaals of neem contact op met het SFL team.', "fail");
+			}
+		})
+		.fail(function() {
+			addNotification('Aantal gasten kon momenteel niet worden opgeslagen, probeer nogmaals of neem contact op met het SFL team.', "fail");
+		});
+	}
+
+</script>

@@ -1,0 +1,66 @@
+<div id="loginScreen" class="compact_small">
+	<div class="grid_6">
+		<div class="preLogin">
+			<img class="sflLogo" src="../img/SFL-logo.png">
+		</div>
+		<div class="wally" style="display: none;">
+			<img src="../img/wally_small.png">
+		</div>
+	</div>
+	<div class="grid_6 loginInputFields">
+		<div class="preLogin">
+			<input type="text" id="login" name="login" placeholder="Login code">
+		</div>
+
+		<div class="wally" style="display: none;">
+			<h1 class="dark text-left" >Dag <span id="username"></span>,</h1>	
+			<p class="dark">
+				Vind Wally en wees welkom op Sing for Life 2019!
+			</p>
+			<input type="text" id="password" name="password" placeholder="Wally puzzelstukje">
+			<br><br>
+			<button onclick="localLogin();" class="button_highlight stretch">Aanmelden</button>
+			<br class="clear"><br>
+		</div>
+
+		<div id="notifications" class="dark margin_top-25"></div>
+	</div>
+</div>
+
+<script>
+
+
+$("#login").keyup(function() {
+    if($(this).val().length == 3) {
+        preLogin($(this).val(), function(data) {
+        	if (data.name) {      		
+        		$("#username").text(data.name);
+	        	$(".preLogin").fadeOut(500, function() {
+	        		$(".loginInputFields").removeClass("loginInputFields").addClass("loginInputFields-2");
+	        		$(".wally").fadeIn(500);	
+	        	});
+	        	        	
+        	} else {
+        		addNotification(data.err);
+        	}        	
+        });
+    }
+});
+
+
+function localLogin() {
+	var loginData = {
+		"logincode": $("#login").val(),
+		"password": $("#password").val()
+	}	
+	login(loginData);
+}
+
+$(document).keypress(function(event) {
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if (keycode == '13' && $("#password").is(":focus")) {
+		localLogin();
+	}
+});
+
+</script>

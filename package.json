@@ -1,0 +1,24 @@
+{
+  "name": "sfl19",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/athiels/SFL19.git"
+  },
+  "author": "Arne Thiels",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/athiels/SFL19/issues"
+  },
+  "homepage": "https://github.com/athiels/SFL19#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "mongoose": "^5.3.6"
+  }
+}

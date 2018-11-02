@@ -1,0 +1,87 @@
+<div class="compact_small headerSpace">
+	<h1 class="containerTitle">Gebruikers beheren</h1>
+	<div style="height: 25px">
+		<div class="grid_4">
+			<input type="text" id="searchUsers" placeholder="Zoeken">	
+		</div>
+		<div class="grid_8 actions">
+			<a href="#register" onclick="loadContent('register')" ><button class="button_highlight right"><i class="fas fa-user-plus"></i> Gebruiker aanmaken</button></a>
+		</div>
+	</div>
+	<br class="clear"><br>
+	<div id="notifications"></div>
+	<br>
+
+	<table id="labels" class="interactive">
+		<thead>
+			<tr style="width: 100%;">
+				<th style="width: 5%;">ID</th>
+				<th style="width: 30%;">Naam</th>
+				<th style="width: 25%;">Bedrijf</th>
+				<th style="width: 30%;">Email</th>
+				<th style="width: 10%; text-align: center">Admin</th>
+				<th style="width: 10%; text-align: center">Actief</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	<div class="loading"><p><i class="fa fa-spinner fa-pulse fa-fw"></i> Gebruikers aan het laden</p></div>
+
+	<br><br><br>
+</div>
+
+<script>
+
+user = getUser();
+
+function getUsers() {
+	$("#labels tbody").empty();
+	$.getJSON( "/api/user/getall", function( data ) {	
+		console.log(data);
+		
+		for (i=0;i<data.length;i++) {
+			var user = data[i];
+
+			userHtml = "<tr id='"+user.id+"'>";
+			userHtml+= "<td>"+ user.id +"</td>";
+			userHtml+= "<td>"+ user.firstname + " " + user.lastname +"</td>";
+			userHtml+= "<td>"+ user.company +"</td>";
+			userHtml+= "<td>"+ user.email +"</td>";
+			// ADMIN
+			if (user.admin) { userHtml+= "<td style='text-align: center'><i class='fas fa-check'></i><span class='hidden'>Admin</span></td>"; }
+			else { userHtml+= "<td></td>"; }
+			// ACTIVE
+			if (user.isactive) { userHtml+= "<td style='text-align: center'><i class='fas fa-check'></i><span class='hidden'>Actief</span></td>"; }
+			else { userHtml+= "<td></td>"; }
+			userHtml+= "</tr>";
+
+			$("#labels tbody").append(userHtml);
+		}
+		
+		$(".loading").remove();
+	});
+}
+getUsers();
+
+$('body').on('click', 'tr td:not(:first-child)', function() {
+	id = $(this).parent().attr('id');
+	loadContent("edituser-"+id);
+});
+
+$("#searchUsers").keyup(function() {
+	var input = $(this).val().toLowerCase();
+	$("tbody tr").each(function() {
+		if ($(this).html().toLowerCase().indexOf(input) == -1) {
+			$(this).hide(200);
+		} else {
+			$(this).show(200);
+		}
+	});
+	if (input == "") {
+		$("tr").show(200);
+	}
+});
+
+</script>
+

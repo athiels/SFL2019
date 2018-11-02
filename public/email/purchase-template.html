@@ -1,0 +1,101 @@
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<body style="font-family: 'Quicksand', sans-serif" >
+<div>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td align="center" valign="top">
+			<img src="http://webshop.top-printing.eu/media/email/email-header.png" alt="TOP-Printing">
+		</td>
+	</tr>
+	<tr>
+		<td align="center" valign="top" style="padding:20px 0 20px 0">
+			<table cellspacing="0" cellpadding="10" border="0" width="700">
+				<tr style="text-align: right;">
+					<td>
+						<span style="font-size: 22px; font-weight: bold; color: #df5d08;">OPDRACHT ONDERWEG</span>
+						<br>
+						<span style="font-size: 17px; font-weight: bold;" >JE TRACKINGNUMMER(S): {{trackingCodes}}</span>
+						<br><br>
+						<span style="font-size: 15px;">
+							{{dateCreated}}
+						</span>
+					</td>
+				</tr>
+				
+				<tr>
+					<td  style="background-color: #f3f2f4; padding: 22px 22px 0 22px !important; border-radius: 10px;"  >
+						<div>
+							<p style="font-size: 22px; font-weight: bold;">We hebben een opdracht voor jullie verzonden</p>
+							<p style="font-size: 17px; font-weight: bold;" >Beste {{name}}</p>
+							<p style="font-size: 15px; color: #525149" >
+								Je bestelling is afgerond en zal {{deliveryDay}} <strong>({{deliveryDate}})</strong> bezorgd worden bij
+								<br>
+							</p>
+							<div style="padding: 10px 50px 10px 50px; border-radius: 10px; background-color: white; margin-left: 50px; font-size: 15px; color: #525149; display: inline-block;">
+								{{address}}
+							</div>
+							<br><br>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table style="width:100%">
+							<tr>	
+								<td style="width:50%; vertical-align: top;">
+									<h4 style="text-transform: uppercase; margin: 0px;">Verzonden producten</h4>
+								</td>
+								<td style="width:50%; vertical-align: top;">
+									<h4 style="text-transform: uppercase; margin: 0px;">Verzendwijze</h4>
+								</td>
+							</tr>	
+							<tr>
+								<td style="width:50%; vertical-align: top; color:#525149;">
+									{{products}}
+									<br>
+									<br>
+								</td>
+								<td style="width:50%; vertical-align: top; color:#525149; margin: 0px;">
+									{{deliveryMethod}}
+									<br>
+									<br>
+								</td>										
+							</tr>
+							<tr>
+								<td colspan="2">	
+									<h4 style="text-transform: uppercase; margin: 0px;">Volg deze zending(en) via</h4>
+									{{trackingUrls}}
+								</td>
+							</tr>                            
+						</table>
+					</td>			
+				</tr>
+				<tr>
+					<td>
+						<p style="margin-top: 30px; font-size: 15px">
+							Met vriendelijke groeten,<br>
+							Anja & Patrick<br>
+							<span style="color: #df5d08">Verzending</span><br>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p style="margin-top: 10px;" >
+								TOP-Printing <span style="color: #df5d08">|</span> Herderstraat 12 <span style="color: #df5d08">|</span> 9240 Zele <span style="color: #df5d08">|</span> België
+								<br>
+								T +32 52 45 45 00 <span style="color: #df5d08">|</span> webshop@top-printing.eu <span style="color: #df5d08">|</span> www.top-printing.eu	
+							<br><br>
+                            <a href="top-printing.eu/terms-and-conditions" style="color: #df5d08">Algemene voorwaarden</a> 
+							<br>
+                            <a href="top-printing.eu/privacy-policy/" style="color: #df5d08">Privacy verklaring</a> 
+                            <br><br><br>
+						</p>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</div>
+</body>

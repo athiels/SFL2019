@@ -1,0 +1,43 @@
+<div class="compact_small headerSpace">
+    <h1 class="containerTitle">Sing for Life 2019</h1>
+    <h3>Dag <span id="username"></span>,</h3>
+    <div class="grid_8">
+	    <p>
+	    	Jullie zijn geslaagd in de opdracht en zijn bij deze officieel uitgenodigd op de <span class="highlight">achtste editie</span> van <span class="highlight">Sing for Life!</span>
+	    	<br><br>
+	    	Maar de uitdaging stopt hier niet! Voorkom dat jullie verplicht een liedje moeten komen zingen op Sing for Life en doe mee aan onze <span class="highlight">SFL-competitie!</span>
+		</p>
+	    <p class="text-center" >
+	    	<button class="button_highlight center">Ik doe mee aan de competitie!</button>
+	    </p>
+	    <p>
+	    	Op <span class="highlight">16 februari 2019</span> mogen jullie mee komen feesten op wat ondertussen toch het beste feestje van Brasschaat genoemd mag worden.
+			<br>
+			Jullie worden traditiegewijs verwacht <span class="highlight">ten huize Thiels</span> - Elshoutbaan 34, Brasschaat, omstreeks 19.00 uur.
+		</p>
+		<p>
+			Dit jaar zal een grote <span class="highlight">winterbarbecue</span> jullie buikjes goed vullen. Daarnaast voorzien we uiteraard ook <span class="highlight">voldoende drankjes</span> zodat jullie stembanden opgewarm zijn om tot in de vroege uurtjes mee te brullen met onze <span class="highlight">SFL-Band!</span>
+		</p>
+	    <p>
+			Voor €60 per persoon, kunnen jullie mee komen genieten van dit <span class="highlight">culinaire</span> en <span class="highlight">muzikale</span> topfeest. Vergeet onze immer geldende regel niet: enkel <span class="highlight">sloefen, sokken </span>of gewassen <span class="highlight">blote voeten</span> toegelaten.
+		</p>
+		<p class="text-center" >
+	    	<button class="button_blue center" onclick="loadContent('guests')">Laat ons weten met hoeveel jullie komen!</button>
+	    </p>
+	</div>
+	
+	<img src="../img/SFL-logo.png" class="grid_4" style="margin-top: 1em;" >
+	<br class="clear">
+</div>
+
+<div id="guests"></div>
+
+<script type="text/javascript">
+	
+	var user = getUser();
+	console.log(user);
+	if (user.name) {        		
+        $("#username").text(user.name);
+    }
+
+</script>

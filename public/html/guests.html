@@ -1,0 +1,58 @@
+<div class="compact_small headerSpace">
+	<div class="text-center">
+		<h2>Met hoeveel personen komen jullie?</h2>
+		<h3>
+			Wij komen met 
+			<input type="number" id="guest_adults" name="guest_adults">
+			volwassenen en
+			<input type="number" id="guest_children" name="guest_children">
+			kinderen (jonger dan 20 jaar).
+		</h3>	
+		<button onclick="saveGuests()" class="button_highlight">Aantal gasten opslaan</button>
+	</div>
+	<br class="clear">
+	<div id="notifications" class="dark margin_top-25"></div>
+</div>
+
+
+<script type="text/javascript">
+	
+	function getGuests() {
+		var user = getUser();
+	
+		$("#guest_adults").val(user.guest_adults);
+		$("#guest_children").val(user.guest_children);
+	}
+	getGuests();
+	
+    function saveGuests() {
+	    var json = {
+	    	"logincode": user.logincode,
+	    	"guest_adults": $("#guest_adults").val() || 0,
+	    	"guest_children": $("#guest_children").val() || 0
+	    }
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/user/update',
+			data: JSON.stringify(json),
+			contentType: "application/json",
+			dataType: 'json'
+		})
+		.done(function(data) {		
+			if (data.success) {
+				getUserInfo(user.logincode, function() {
+					//location.reload();
+					getGuests();
+					addNotification('Aantal gasten succesvol opgeslagen', "success");
+				});
+			} else {
+				addNotification('Aantal gasten kon momenteel niet worden opgeslagen, probeer nogmaals of neem contact op met het SFL team.', "fail");
+			}
+		})
+		.fail(function() {
+			addNotification('Aantal gasten kon momenteel niet worden opgeslagen, probeer nogmaals of neem contact op met het SFL team.', "fail");
+		});
+	}
+
+</script>
