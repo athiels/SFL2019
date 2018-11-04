@@ -7,10 +7,8 @@ const fs = require('fs');
 const path = require('path');
 
 require('./api/models/user');
-require('./api/models/settings');
 const auth = require('./api/controllers/authentication');
 const artist = require('./api/controllers/artist');
-
 
 const app = express();
 app.use(bodyParser.json());
@@ -46,6 +44,10 @@ app.post('/api/user/get', function(req, res) {
 	auth.getuser(req, res);
 });
 
+app.get('/api/user/details', function(req, res) {
+	auth.getdetails(req, res);
+});
+
 app.post('/api/user/update', function(req, res) {
 	auth.update(req, res);
 });
@@ -54,11 +56,21 @@ app.get('/api/user/getall', function(req, res) {
 	auth.getall(req, res);
 });
 
-app.get('/api/artist/found', function(req, res) {
-	artist.getfound(req, res);
+app.get('/api/artist/get', function(req, res) {
+	artist.get(req, res);
 });
 
+app.post('/api/artist/new', function(req, res) {
+	artist.new(req, res);
+});
 
+app.post('/api/artist/submit', function(req, res) {
+	artist.submitSquare(req, res);
+});
+
+app.get('/api/artist/highscores', function(req, res) {
+	artist.highscores(req, res);
+});
 
 function uploadUsers() {
 	var importedUsers = Array();
@@ -73,5 +85,4 @@ function uploadUsers() {
 	});
 }
 //uploadUsers();
-
 

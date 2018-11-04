@@ -1,21 +1,27 @@
 <div id="competition" class="compact_small headerSpace">
 	<h1 class="containerTitle">SFL Competitie</h1>
 
-	<div id="competition_main">
-		<div class="grid_6">
-			<div class="newArtist">
-				<h2>
-					Artiesten			
-					<button onclick="loadContent('competition_new')" class="button_highlight right" style="margin-top: -5px;">Nieuwe artiest toevoegen</button>
-				</h2>
-				<div id="foundArtistsList"></div>
-			</div>
-		</div>
-
-		<div class="grid_6" style="border-left: 2px silver solid; height: 900px;" >
-			
+	<div class="grid_8"  >
+		<div class="newArtist">
+			<h2>
+				Artiesten			
+				<button onclick="loadContent('competition_new')" class="button_highlight right" style="margin-top: -5px; display: none">Nieuwe artiest toevoegen</button>
+			</h2>
+			<p>
+				Zoek alle 18 artiesten in de <a class="highlight" href="../img/puzzel.jpg" target="_blank">puzzel</a> en verdien punten!<br>Klik op een naam om het puzzelstukje in te geven.<br><br>	
+			</p>
+			<div id="artistsList"></div>
 		</div>
 	</div>
+
+	<div class="grid_4">
+		<h2>Rangschikking</h2>
+		<p>
+			De laatste drie zijn verplicht een liedje te zingen op ons SFL podium!<br><br>	
+		</p>
+		<div id="highscores"></div>
+	</div>
+	
 	<br class="clear">
 	<div id="notifications" class="dark margin_top-25"></div>
 </div>
@@ -23,59 +29,152 @@
 
 <script type="text/javascript">
 
-	function getFoundArtists() {
-		$.getJSON( "/api/artist/found", function( data ) {	
-			if (data.err) addNotification(err, "failed");
-			if (data.foundartists) {
-				foundartists = data.foundartists;
-				console.log(foundartists);
-				if (foundartists.length) {
-					
-				} else {
-					$("#foundArtistsList").html("<p><br><br>Er zijn nog geen artiesten gevonden...<br><br>Heb jij een artiest gevonden op onze puzzel? <br>Klik dan op 'Nieuwe artiest toevoegen'");
-				}
-			}
-		});	
-	}
-	getFoundArtists();
-	
-	
-	function getGuests() {
-		var user = getUser();
-	
-		$("#guest_adults").val(user.guest_adults);
-		$("#guest_children").val(user.guest_children);
-	}
-	getGuests();
-	
-    function saveGuests() {
-	    var json = {
-	    	"logincode": user.logincode,
-	    	"guest_adults": $("#guest_adults").val() || 0,
-	    	"guest_children": $("#guest_children").val() || 0
-	    }
-
-		$.ajax({
-			type: 'POST',
-			url: '/api/user/update',
-			data: JSON.stringify(json),
-			contentType: "application/json",
-			dataType: 'json'
-		})
-		.done(function(data) {		
-			if (data.success) {
-				getUserInfo(user.logincode, function() {
-					//location.reload();
-					getGuests();
-					addNotification('Aantal gasten succesvol opgeslagen', "success");
-				});
+function getArtists() {
+	$.getJSON( "/api/artist/get?logincode="+user.logincode, function( data ) {	
+		if (data.err) addNotification(err, "failed");
+		if (data.user) {
+			if (data.user.artists.length) {
+				createFoundArtistsHtml(data.user.artists);
 			} else {
-				addNotification('Aantal gasten kon momenteel niet worden opgeslagen, probeer nogmaals of neem contact op met het SFL team.', "fail");
+				$("#foundArtistsList").html("<p><br><br>Er zijn nog geen artiesten gevonden...<br><br>Heb jij een artiest gevonden op onze puzzel? <br>Klik dan op 'Nieuwe artiest toevoegen'");
 			}
-		})
-		.fail(function() {
-			addNotification('Aantal gasten kon momenteel niet worden opgeslagen, probeer nogmaals of neem contact op met het SFL team.', "fail");
-		});
+		}
+	});	
+}
+getArtists();
+	
+	
+function createFoundArtistsHtml(artists) {
+	$("#artistsList").empty();
+	for (i=0;i<artists.length;i++) {
+		if (artists[i].found) var action = "";
+		else var action = "getArtistSquare('"+artists[i].artist_name+"')";
+		
+		var html = "";
+		html += '<div class="grid_6';
+		if (artists[i].square == "") html += ' comp_artist';
+		html += '" data-name="'+artists[i].artist_name+'" onclick="'+action+'">';
+		html += '<span style="width: 60px; display: inline-block;">'
+		if (artists[i].square) html += '<i class="fas fa-check"></i>';
+		html += '</span>';
+		html += '<span>'+artists[i].artist_name+'<br><br></span>';
+		html += '</div>';
+		$("#artistsList").append(html);
 	}
+}
 
+
+function getArtistSquare(artistName) {
+	$.confirm({
+		closeIcon: true,
+		theme: 'supervan',
+	    title: 'Puzzelstukje van '+artistName,
+	    content: '<form><input type="text" class="square form-control" required autofocus  /></form>',
+	    buttons: {
+	        formSubmit: {
+	            text: 'Check',
+	            btnClass: 'button_highlight',
+	            action: function () {
+	                var square = this.$content.find('.square').val();
+	                if (square) submitArtistSquare(artistName, square);
+	            }
+	        }
+	    },
+	    onContentReady: function () {
+	        // bind to events
+	        var jc = this;
+	        this.$content.find('form').on('submit', function (e) {
+	            // if the user submits the form by pressing enter in the field.
+	            e.preventDefault();
+	            jc.$$formSubmit.trigger('click'); // reference the button and click it
+	        });
+	    },
+	    onOpen: function () {
+			var offset = document.body.scrollTop;
+			document.body.style.top = (offset * -1) + 'px';
+			document.body.classList.add('modal--opened');
+		},
+		onClose: function () {
+			var offset = parseInt(document.body.style.top, 10);
+			document.body.classList.remove('modal--opened');
+			document.body.scrollTop = (offset * -1);
+		}
+	});
+}
+
+function submitArtistSquare(artistName, square) {
+	var json = {
+    	"logincode": user.logincode,
+    	"artist_name": artistName,
+    	"artist_square": square
+    }
+
+	$.ajax({
+		type: 'POST',
+		url: '/api/artist/submit',
+		data: JSON.stringify(json),
+		contentType: "application/json",
+		dataType: 'json'
+	})
+	.done(function(data) {		
+		if (data.success) {
+			getArtists();
+			getHighscores();
+			alert(data.msg, '<img class="alertImg" src="../img/artists/'+artistName+'.png">');
+		} else {
+			alert(data.err);
+		}
+	})
+	.fail(function() {
+		addNotification(data.err, "fail");
+	});
+}
+
+function getHighscores() {
+	$.getJSON( "/api/artist/highscores", function( data ) {	
+		if (data.err) addNotification(err, "failed");
+		if (data.highscores) {
+			createHighscoresHtml(data.highscores);
+		}
+	});	
+}
+getHighscores();
+
+var isShowAllHighscores = false;
+
+function createHighscoresHtml(highscores) {
+
+	var splitindex = 5;
+
+	$("#highscores").empty();
+	for (i=0;i<highscores.length;i++) {
+
+		if (i==splitindex && !isShowAllHighscores) {
+			var split = '<p id="highscoresShowMore" class="text-center highlight pointer" onclick="showAllHighscores()"><i class="fas fa-ellipsis-v"></i> Meer weergeven</p>';
+			$("#highscores").append(split);
+		}
+
+		var cl = "";
+		if (i >= highscores.length-3) cl = "degradation";
+		if (highscores[i][0] == user.name) cl = "blue";
+		var html = '<p class="'+cl+'"';
+
+		if (!isShowAllHighscores && i > (splitindex-1) && i < highscores.length-3) {
+			html += 'style="display: none;"';
+		}
+
+		html += '>';
+		html += '<span style="display: inline-block; width: 50px;">' + (i+1) + '.</span>'; 
+		html += highscores[i][0]+'<span class="right">'+highscores[i][1]+'</span>';
+		html += '</p>';
+		$("#highscores").append(html);
+	}
+}
+
+
+function showAllHighscores() {
+	isShowAllHighscores = true;
+	$("#highscores p").show(500);
+	$("#highscoresShowMore").hide(500);
+}
 </script>

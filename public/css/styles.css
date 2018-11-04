@@ -1,7 +1,3 @@
-/***** Standard 1200px *****/
-.row { margin : 0 auto; width : 1200px; }
-
-.row .row { width : auto; margin : 0 -15px; }
 
 .grid_1, .grid_2, .grid_3, .grid_4, .grid_5, .grid_6, .grid_7, .grid_8, .grid_9, .grid_10, .grid_11, .grid_12 {
     display : inline; float : left; position : relative; padding : 0 15px; min-height : 1px; box-sizing : border-box;
@@ -74,11 +70,12 @@
 
 @media screen and (max-width: 768px) {
 	.navi {  
-		margin: 15px;
+		margin: 15px 5px;
 	}
 	.navi > li {
 		float: none;
 		clear: both;
+		margin-left: 0px; 
 	}
 }
    
@@ -113,7 +110,7 @@ input[type=email] {
 	border-bottom: solid 1px lightgrey;	
 	font-family: var(--defaultFontFamily);
 	font-size: var(--defaultFontSize);
-	width: calc(100% - 155px);
+	width: calc(100% - 250px);
 	position: relative;
 }
 
@@ -167,6 +164,14 @@ select {
 label {
 	font-size: var(--defaultFontSize);
 	font-family: var(--defaultFontFamily);
+}
+
+#artistsList label {
+	width: 250px;
+}
+
+#artistsList input[type=text] {
+	width: 60px;
 }
 
 .validationFailed {
@@ -313,4 +318,84 @@ h2.containerTitle {
 
 .brandimg:hover {
 	cursor: pointer;
+}
+
+#artistsList .comp_artist:hover {
+	cursor: pointer;
+	color: var(--highlightcolor);
+}
+
+
+.jconfirm .jconfirm-box label {
+	width: 400px;
+}
+
+.jconfirm .jconfirm-box input {
+	width: 100px;
+}
+
+.jconfirm.jconfirm-supervan .jconfirm-box .jconfirm-buttons button {	
+	margin: 3px;
+	background-color: var(--highlightcolor);
+	color: white;
+	padding: 10px 30px;
+	font-size: var(--defaultFontSize);
+	border: none;
+	border-radius: 5px;
+}
+
+.jconfirm.jconfirm-supervan .jconfirm-bg {
+	background-color: rgba(0,0,0,0.85);
+	opacity: 0.95;
+	background: url(../img/background.jpg); 
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top; 
+}
+
+.jconfirm-title {
+	line-height: 30px;
+}
+
+.modal--opened {
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
+.jconfirm.jconfirm-supervan .jconfirm-box {
+	max-width: 30vw;
+}
+
+@media screen and (max-width: 1400px) {
+	.jconfirm.jconfirm-supervan .jconfirm-box {
+		max-width: 60vw;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.jconfirm.jconfirm-supervan .jconfirm-box {
+		max-width: 100vw;
+	}
+}
+
+.degradation {
+	color: GoldenRod ;
+}
+
+.pointer:hover {
+	cursor: pointer;
+}
+
+.alertImg {
+	max-width: 150px;
+}
+
+#guestTable tbody tr:hover {
+	cursor: pointer;
+	color: var(--highlightcolor);
+}
+
+#guestTable tbody td:not(:first-child) {
+	text-align: center;
 }

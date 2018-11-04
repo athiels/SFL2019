@@ -25,10 +25,7 @@
   
 }
 
-@font-face {
-    font-family: "barcodefont";
-    src: url("./3OF9.TTF");
-}
+
 
 hr {
     display: block;
@@ -38,22 +35,21 @@ hr {
 }
 
 .smallFont {
-	font-size: 11px;
-}
-
-.barcode {
-	font-family: "barcodefont" !important;
-	font-size: 28px !important;
+	font-size: 15px;
 }
 
 body {
 	margin: 0px;
-	font-family: 'Comfortaa', cursive;	
+	font-family: var(--defaultFontFamily);	
 	background-color: black;
-	background: url(../img/background.jpg); 
-	background-attachment:fixed;
+	background: url(../img/background.jpg) no-repeat center center fixed; 
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
+	  height:100vh;
 	color: white;
-	font-size: 23px;
+	font-size: var(--defaultFontSize);
 }
 
 h1, h2, h3, h4 {
@@ -67,7 +63,11 @@ h1, h2, h3, h4 {
 header {
 	z-index: 100;
 	background-color: black;
-	background: url(../img/background.jpg); 
+	background: url(../img/background.jpg) no-repeat center center fixed; 
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
 	box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.75);
 	height: 80px;
 	position: fixed !important;
@@ -126,6 +126,12 @@ header {
 
 .highlight {
 	color: var(--highlightcolor);
+}
+
+button {font-family: : var(--defaultFontFamily);}
+
+.blue {
+	color: var(--blue);
 }
 
 .button_blue {
@@ -459,7 +465,9 @@ table#labels tr.labelStatus-92 td:first-child {
 	cursor: pointer;
 }
 
-.fas, .fa {
+
+footer .fas,
+footer .fa {
 	padding: 3px 10px;
 }
 

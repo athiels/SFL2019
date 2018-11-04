@@ -6,6 +6,15 @@ var userSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
+  password: {
+    type: String,
+    required: true
+  },
+  activated: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -19,9 +28,6 @@ var userSchema = new mongoose.Schema({
   },
   guest_children: {
     type: String,
-  },
-  loginhistory: {
-    type: Array
   }
 });
 

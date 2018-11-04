@@ -33,6 +33,10 @@ function removeExcessNotifications() {
 	$("#notifications p.deleteOnNext").remove();
 }
 
+function clearNotifications() {
+	$("#notifications p").remove();
+}
+
 function setCookie(cname, cvalue, ctime) {
 	if (ctime) {
 		var time = Date.now();
@@ -83,6 +87,25 @@ function confirm(title, msg, confirm, cancel) {
 	return false;
 }
 
+function alert(msg, img, cb) {
+	var alert = $.alert({
+		theme: 'supervan',
+	    title: img || " ",
+	    content: msg,
+	    confirm: function(){
+	        if (cb) cb();
+	    },
+	    onContentReady: function () {
+	        $(document).keypress(function(event) {
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+				if (keycode == '13') {
+					alert.close();
+				}
+			});
+	    },
+	});
+}
+
 function validateForm() {
 
 	$(".validationFailed").removeClass("validationFailed");
@@ -103,3 +126,7 @@ $('html').on('click', '.emptyInput', function() {
 	$(this).prev('input').val("");
 	$(this).prev('input').change();
 });
+
+function gri(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}

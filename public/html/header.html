@@ -56,16 +56,19 @@ function loadContent(page, refresh) {
 			case "competition":		
 				loadPage("competition");
 				break;
-			case "competition_new":		
-				loadPage("competition_new");
-				break;				
+			case "admin":		
+				loadPage("admin/admin");
+				break;	
+			case (page.match(/userdetails/) || {}).input:	
+				loadPage("admin/userdetails");
 
 			default:
 				$( "#content" ).load( "home.html" );
 				break;
 		}
 	} else {
-		$( "#mainNav" ).hide();
+		$( "#header" ).hide();
+		$( "#footer" ).hide();
 		$( "#content" ).load( "html/user/login.html" );
 	}
 
@@ -80,7 +83,7 @@ loadContent();
 
 function loadPage(page) {
 	$( "#content" ).load( "html/"+page+".html", function() {
-		enlargeContentDiv();
+		//enlargeContentDiv();
 	});
 }
 

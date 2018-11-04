@@ -1,189 +1,114 @@
 <div class="compact_small headerSpace">
-	<div id="userForm">
-		<div class="grid_6" >
-			<h2 class="containerTitle">Klantgegevens</h2>
-			<label for="firstname">Voornaam *</label>
-			<input type="text" id="firstname" name="firstname" class="required">
-			<br><br>
-			<label for="lastname">Achternaam *</label>
-			<input type="text" id="lastname" name="lastname" class="required">
-			<br><br>
-			<label for="company">Bedrijf *</label>
-			<input type="text" id="company" name="company" class="required">
-			<br><br>
-			<label for="email">E-mail adres *</label>
-			<input type="email" id="email" name="email" disabled class="required">
-			<br><br>
-			<label for="password">Wachtwoord *</label>
-			<input type="password" id="password" name="password">
-			<br><br>
-			<label for="useradmin">Admin <i class="fas fa-users-cog"></i></label>
-			<input type="checkbox" id="useradmin" name="useradmin">
-			<br><br>
-			<label for="useractive">Geactiveerd <i class="fas fa-user-lock"></i></label>
-			<input type="checkbox" id="useractive" name="useractive">
-		</div>
-		<div class="grid_6" >
-			<h2 class="containerTitle">Adresgegevens</h2>
-			<label for="address">Adres *</label>
-			<input type="text" id="address" name="address" class="required">
-			<br><br>
-			<label for="zipcode">Postcode *</label>
-			<input type="text" id="zipcode" name="zipcode" class="required">
-			<br><br>
-			<label for="city">Plaats *</label>
-			<input type="text" id="city" name="city" class="required">
-			<br><br>
-			<label for="country">Land *</label>
-			<select id="country" name="country" class="required">
-				<option value="BE">België</option>
-				<option value="LU">Luxemburg</option>
-				<option value="NL">Nederland</option>
-			</select>
-		</div>
-		
-		<br class="clear"><br>
-		<div class="right">* Verplichte velden.</div>
-		<br>
-
-		<br class="clear">		
-		<button onclick="updateUser();" class="button_highlight right"><i class="fas fa-check"></i> Opslaan</button>
-		<button onclick="deleteUser();" class="button_sub right"><i class="fas fa-trash"></i> Verwijderen</button>
-
-		<br class="clear"><br>
-		<div class="grid_6" >
-			<table>
-				<tr><td>Gebruiker ID</td><td id="userid"></td></tr>
-				<tr><td>Aangemaakt op</td><td id="createdon"></td></tr>
-				<tr><td>Aangemaakt door</td><td id="createdby"></td></tr>
-			</table>
-		</div>
-
-		<div  class="grid_6" id="notifications"></div>
+	
+	<div id="userDetails" class="grid_6"></div>
+	<div id="userCompetition" class="grid_6">
+		<canvas id="competitionChart" width="400" height="200"></canvas>
 	</div>
-
-	
 	<br class="clear"><br>
-	
 	<div id="notifications"></div>
+	
+
 </div>
 
 <script>
 
 var url = new URL(window.location);
-var userid = url.href.substr(url.href.lastIndexOf('-') + 1);
+var logincode = url.href.substr(url.href.lastIndexOf('-') + 1);
 
 var user;
 
 function getUserDetails() {
-	$(".actions").empty();
-
-	$.ajax({
-		type: 'POST',
-		url: '/api/user/get',
-		data: JSON.stringify({"id": userid}),
-		contentType: "application/json",
-		dataType: 'json'
-	})
-	.done(function(data) {	
-		console.log(data);	
-		user = data.user;
-		fillUserForm();
-	})
-	.fail(function() {
-		addNotification('Gegevens van de gebruiker konden niet opgehaald worden.', "fail");
-	});
+	$.getJSON( "/api/user/details?logincode="+logincode, function( data ) {	
+		if (data.err) addNotification(err, "failed");
+		if (data.user) {
+			console.log(data.user);
+			user = data.user;
+			createUserHtml(data.user);
+			createCompetitionChart(data.user);
+		}
+	});	
 }
 getUserDetails();
 
-function fillUserForm() {
+function createUserHtml(user) {
+	var html = "";
 
-	$("input").val("");
+	html += '<h2>' + user.name + '</h2>';
+	if (user.activated) html += '<p>Account geactiveerd</p>';
+	else html += '<button class="button_highlight right" onclick="activateAccount()">Account activeren</button></span></h1>';
+	$("#userDetails").html(html);
 
-	$("#firstname").val(user.firstname);
-	$("#lastname").val(user.lastname);
-	$("#company").val(user.company);
-	$("#email").val(user.email);
-	$("#useradmin").prop( "checked", user.admin);
-	$("#useractive").prop( "checked", user.isactive);
+	var compHtml = '';
+	var totalScore = 0;
+	for (i=0; i<user.artists.length; i++) {
+		compHtml += '<p style="margin: 3px">' + user.artists[i].artist_name + '<span class="right">';
+		if (user.artists[i].found) compHtml += 'Gevonden na '+user.artists[i].tries+' keer';	
+		else compHtml += 'Nog niet gevonden';
+		compHtml += '</span></p>';
 
-	$("#address").val(user.address);
-	$("#zipcode").val(user.zipcode);
-	$("#city").val(user.city);
-	$("#country").val(user.country);
-
-	$("#userid").text(user.id);
-	moment.locale('nl')
-	var createdOn = moment(parseInt(user.createdon)).format("DD MMMM YYYY - HH:mm:ss")
-	$("#createdon").text(createdOn);
-	$("#createdby").text(user.createdby);
-}
-
-function getFormData() {
-
-	if (!validateForm()) return false;
-	
-	var jsonData = {
-		"firstname": $("#firstname").val(),
-		"lastname": $("#lastname").val(),
-		"company": $("#company").val(),
-		"admin": $("#useradmin").prop('checked'),
-		"isactive": $("#useractive").prop('checked'),
-		"email": $("#email").val(),
-		"password": $("#password").val(),
-		"address": $("#address").val(),
-		"zipcode": $("#zipcode").val(),
-		"city": $("#city").val(),
-		"country": $("#country").val(),		
-		"createdby": user.username
+		var score = (4-parseInt(user.artists[i].tries));
+		if (score < 0) score = 0;
+		totalScore += score;
 	}
-	return jsonData;
+
+	compHtml = '<h2>Competitie<span class="right">'+totalScore+' ptn.</span></h2>';
+	$("#userCompetition").prepend(compHtml);
 }
 
-function updateUser() {
-	var jsonData = getFormData();
-	if (!jsonData) return;
-	
-	confirm("Gebruiker wijzigen?","Weet je zeker dat je de gebruikergegevens wil wijzigen?" , function() {
-		$.ajax({
-			type: 'POST',
-			url: '/api/user/update',
-			data: JSON.stringify(jsonData),
-			contentType: "application/json",
-			dataType: 'json'
-		})
-		.done(function(data) {		
-			if (data.msg) addNotification(data.msg);
-			if (data.err) addNotification(data.err);
-			if (data.success) { loadContent("admin", true) }
-		})
-		.fail(function() {
-			addNotification('Er is iets misgelopen bij het opslaan van de gebruiker.', "fail");
-		});
-	}, function(){
-		getUserDetails();
+function activateAccount() {
+	$.ajax({
+		type: 'POST',
+		url: '/api/user/update',
+		data: JSON.stringify({
+			"logincode" : user.logincode,
+			"activated" : true
+		}),
+		contentType: "application/json",
+		dataType: 'json'
+	})
+	.done(function(data) {		
+		if (data.msg) addNotification(data.msg);
+		if (data.err) addNotification(data.err);
+		if (data.success) { getUserDetails(); }
+	})
+	.fail(function() {
+		addNotification('Er is iets misgelopen bij het opslaan van de gebruiker.', "fail");
 	});
 }
 
-function deleteUser() {
-	confirm("Gebruiker verwijderen?","Weet je zeker dat je deze gebruiker wil verwijderen?" , function() {
-		var jsonData = getFormData();
-		$.ajax({
-			type: 'POST',
-			url: '/api/user/delete',
-			data: JSON.stringify({"id": userid}),
-			contentType: "application/json",
-			dataType: 'json'
-		})
-		.done(function(data) {		
-			if (data.msg) addNotification(data.msg);
-			if (data.err) addNotification(data.err);
-			if (data.success) { loadContent("admin", true) }
-		})
-		.fail(function() {
-			addNotification('Er is iets misgelopen bij het opslaan van de gebruiker.', "fail");
-		});
+
+function createCompetitionChart(user) {
+
+	var labels = Array();
+	var dataset = Array();
+	var backgroundColor = Array();
+	for (i=0; i<user.artists.length; i++) {
+		labels.push(user.artists[i].artist_name);
+		dataset.push(user.artists[i].tries);
+		backgroundColor.push('rgba('+gri(255)+', '+gri(255)+', '+gri(255)+', 0.4)');
+	}
+
+	var ctx = document.getElementById("competitionChart").getContext('2d');
+	var myChart = new Chart(ctx, {
+	    type: 'bar',
+	    data: {
+	        labels: labels,
+	        datasets: [{
+	            label: 'Aantal gokken',
+	            data: dataset,
+	            backgroundColor: backgroundColor,
+	            borderWidth: 1
+	        }]
+	    },
+	    options: {
+	        scales: {
+	            yAxes: [{
+	                ticks: {
+	                    beginAtZero:true
+	                }
+	            }]
+	        }
+	    }
 	});
 }
-
 </script>

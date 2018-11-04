@@ -9,7 +9,7 @@
 	</div>
 	<div class="grid_6 loginInputFields">
 		<div class="preLogin">
-			<input type="text" id="login" name="login" placeholder="Login code">
+			<input type="text" id="login" name="login" placeholder="Login code" autofocus>
 		</div>
 
 		<div class="wally" style="display: none;">
@@ -17,7 +17,7 @@
 			<p class="dark">
 				Vind Wally en wees welkom op Sing for Life 2019!
 			</p>
-			<input type="text" id="password" name="password" placeholder="Wally puzzelstukje">
+			<input type="text" id="password" name="password" placeholder="Wally puzzelstukje" autofocus>
 			<br><br>
 			<button onclick="localLogin();" class="button_highlight stretch">Aanmelden</button>
 			<br class="clear"><br>
@@ -31,15 +31,15 @@
 
 
 $("#login").keyup(function() {
-    if($(this).val().length == 3) {
-        preLogin($(this).val(), function(data) {
+    if($(this).val().length == 6) {
+        preLogin($(this).val().toLowerCase(), function(data) {
         	if (data.name) {      		
         		$("#username").text(data.name);
 	        	$(".preLogin").fadeOut(500, function() {
+	        		clearNotifications();
 	        		$(".loginInputFields").removeClass("loginInputFields").addClass("loginInputFields-2");
 	        		$(".wally").fadeIn(500);	
-	        	});
-	        	        	
+	        	});	        	        
         	} else {
         		addNotification(data.err);
         	}        	
@@ -50,7 +50,7 @@ $("#login").keyup(function() {
 
 function localLogin() {
 	var loginData = {
-		"logincode": $("#login").val(),
+		"logincode": $("#login").val().toLowerCase(),
 		"password": $("#password").val()
 	}	
 	login(loginData);

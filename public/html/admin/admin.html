@@ -1,87 +1,145 @@
 <div class="compact_small headerSpace">
-	<h1 class="containerTitle">Gebruikers beheren</h1>
-	<div style="height: 25px">
-		<div class="grid_4">
-			<input type="text" id="searchUsers" placeholder="Zoeken">	
-		</div>
-		<div class="grid_8 actions">
-			<a href="#register" onclick="loadContent('register')" ><button class="button_highlight right"><i class="fas fa-user-plus"></i> Gebruiker aanmaken</button></a>
-		</div>
+	<div class="grid_8">
+		<h2>Gasten</h2>
+		<p id="totalGuests"></p>
+		<table id="guestTable">
+			<thead><tr><th>Naam</th><th>Actief</th><th>Volw.</th><th>Kind.</th></tr></thead>
+			<tbody></tbody>
+		</table>
 	</div>
-	<br class="clear"><br>
-	<div id="notifications"></div>
-	<br>
 
-	<table id="labels" class="interactive">
-		<thead>
-			<tr style="width: 100%;">
-				<th style="width: 5%;">ID</th>
-				<th style="width: 30%;">Naam</th>
-				<th style="width: 25%;">Bedrijf</th>
-				<th style="width: 30%;">Email</th>
-				<th style="width: 10%; text-align: center">Admin</th>
-				<th style="width: 10%; text-align: center">Actief</th>
-			</tr>
-		</thead>
-		<tbody>
-		</tbody>
-	</table>
-	<div class="loading"><p><i class="fa fa-spinner fa-pulse fa-fw"></i> Gebruikers aan het laden</p></div>
+	<div class="grid_4">
+		<h2>Competitie rangschikking</h2>
+		<div id="highscores"></div>
+	</div>
 
-	<br><br><br>
+	<br class="clear">
+
+	<div id="notifications" class="dark margin_top-25"></div>
 </div>
 
-<script>
-
-user = getUser();
-
+<script type="text/javascript">
+	
+var users;
 function getUsers() {
-	$("#labels tbody").empty();
 	$.getJSON( "/api/user/getall", function( data ) {	
-		console.log(data);
-		
-		for (i=0;i<data.length;i++) {
-			var user = data[i];
-
-			userHtml = "<tr id='"+user.id+"'>";
-			userHtml+= "<td>"+ user.id +"</td>";
-			userHtml+= "<td>"+ user.firstname + " " + user.lastname +"</td>";
-			userHtml+= "<td>"+ user.company +"</td>";
-			userHtml+= "<td>"+ user.email +"</td>";
-			// ADMIN
-			if (user.admin) { userHtml+= "<td style='text-align: center'><i class='fas fa-check'></i><span class='hidden'>Admin</span></td>"; }
-			else { userHtml+= "<td></td>"; }
-			// ACTIVE
-			if (user.isactive) { userHtml+= "<td style='text-align: center'><i class='fas fa-check'></i><span class='hidden'>Actief</span></td>"; }
-			else { userHtml+= "<td></td>"; }
-			userHtml+= "</tr>";
-
-			$("#labels tbody").append(userHtml);
+		if (data.err) addNotification(err, "failed");
+		if (data.users) {
+			users = data.users;
+			createGuestList(data.users);
 		}
-		
-		$(".loading").remove();
-	});
+	});	
 }
 getUsers();
 
-$('body').on('click', 'tr td:not(:first-child)', function() {
-	id = $(this).parent().attr('id');
-	loadContent("edituser-"+id);
-});
 
-$("#searchUsers").keyup(function() {
-	var input = $(this).val().toLowerCase();
-	$("tbody tr").each(function() {
-		if ($(this).html().toLowerCase().indexOf(input) == -1) {
-			$(this).hide(200);
-		} else {
-			$(this).show(200);
-		}
-	});
-	if (input == "") {
-		$("tr").show(200);
+function createGuestList(users) {
+
+	var totalAdults = 0;
+	var totalChildren = 0;
+	
+	users.sort(sortByName);
+	for (i=0; i<users.length; i++) {
+		totalAdults += parseInt(users[i].guest_adults);
+		totalChildren += parseInt(users[i].guest_children);
+
+		var html = '<tr id="'+users[i].logincode+'">';
+		html += '<td>'+ users[i].name +'</td>';
+		var active = "";
+		if (users[i].activated) active = '<i class="fas fa-check"></i>';
+		html += '<td>'+active+'</td>';
+		html += '<td>'+ users[i].guest_adults +'</td>';
+		html += '<td>'+ users[i].guest_children +'</td>';
+		html += '<tr>';
+		$("#guestTable tbody").append(html);
 	}
+
+	var totalGuests = parseInt(totalAdults) + parseInt(totalChildren);
+	var guestsHtml = '<p class="grid_6">Totaal toezeggingen: '+totalGuests;
+	guestsHtml += '<br><span class="smallFont"> - Aantal volwassenen: '+totalAdults;
+	guestsHtml += '<br>- Aantal kinderen: '+totalChildren+'</span>';
+	guestsHtml += '<br><br>Budget: € '+ ((totalAdults * 60)+(totalChildren * 25))+'</p>';
+	guestsHtml += '<div class="grid_6"><canvas id="competitionChart" height="200"></canvas></div><br class="clear">';
+	$("#totalGuests").html(guestsHtml);
+
+	createGustsChart(users);
+	
+}
+
+function sortByName(a, b) {
+    if (a.name === b.name) {
+        return 0;
+    }
+    else {
+        return (a.name < b.name) ? -1 : 1;
+    }
+}
+
+function getHighscores() {
+	$.getJSON( "/api/artist/highscores", function( data ) {	
+		if (data.err) addNotification(err, "failed");
+		if (data.highscores) {
+			createHighscoresHtml(data.highscores);
+		}
+	});	
+}
+getHighscores();
+
+function createHighscoresHtml(highscores) {
+
+	$("#highscores").empty();
+	for (i=0;i<highscores.length;i++) {
+
+	
+		var cl = "";
+		if (i >= highscores.length-3) cl = "degradation";
+		if (highscores[i][0] == user.name) cl = "blue";
+		var html = '<p style="margin: 5px" class="'+cl+'"';
+
+		html += '>';
+		html += '<span style="display: inline-block; width: 50px;">' + (i+1) + '.</span>'; 
+		html += highscores[i][0]+'<span class="right">'+highscores[i][1]+'</span>';
+		html += '</p>';
+		$("#highscores").append(html);
+	}
+}
+
+$("body").on("click", "tr", function() {
+	loadContent("userdetails-"+$(this).attr('id'));
 });
 
+function createGustsChart(users) {
+
+	var totalAdults = 0;
+	var totalChildren = 0;
+	for (i=0; i<users.length; i++) {
+		totalAdults += parseInt(users[i].guest_adults);
+		totalChildren += parseInt(users[i].guest_children);
+	}
+
+	var labels = ["Volwassenen", "Kinderen"];
+	var dataset = [totalAdults, totalChildren];
+	var backgroundColor = ['rgba('+gri(255)+', '+gri(255)+', '+gri(255)+', 0.4)', 'rgba('+gri(255)+', '+gri(255)+', '+gri(255)+', 0.4)'];
+
+	var ctx = document.getElementById("competitionChart").getContext('2d');
+	var myChart = new Chart(ctx, {
+	    type: 'pie',
+	    data: {
+	        labels: labels,
+	        datasets: [{
+	            label: 'Aantal gokken',
+	            data: dataset,
+	            backgroundColor: backgroundColor,
+	            borderWidth: 1
+	        }]
+	    },
+	    options: {
+	        legend: {
+				display: false
+			}
+	    }
+	});
+}
 </script>
 
+</script>

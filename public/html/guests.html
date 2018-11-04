@@ -42,9 +42,9 @@
 		.done(function(data) {		
 			if (data.success) {
 				getUserInfo(user.logincode, function() {
-					//location.reload();
 					getGuests();
-					addNotification('Aantal gasten succesvol opgeslagen', "success");
+					clearNotifications();
+					addNotification('Aantal gasten succesvol opgeslagen<br>Jullie komen in totaal met '+(parseInt(user.guest_adults)+parseInt(user.guest_children))+".", "success");
 				});
 			} else {
 				addNotification('Aantal gasten kon momenteel niet worden opgeslagen, probeer nogmaals of neem contact op met het SFL team.', "fail");

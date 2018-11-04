@@ -41,8 +41,8 @@ function getUser() {
 }
 
 function userIsLoggedIn() {
-	var email = getCookie("login");
-	if (email) {
+	var logincode = getCookie("login");
+	if (logincode) {
 		return true;
 	}
 	return false;
@@ -73,8 +73,9 @@ function login(loginData) {
 	.done(function(data) {
 		setCookie("login", loginData.logincode);		
 		getUserInfo(loginData.logincode, function() {
-			console.log(data);
-			loadContent("home", true)
+			$(".wally").fadeOut(500, function() {
+				loadContent("home", true);
+			});
 		});		
 	})
 	.fail(function() {
