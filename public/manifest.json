@@ -1,0 +1,30 @@
+{
+  "short_name": "SFL 19",
+  "name": "Sing for Life 2019",
+  "theme_color": "black",
+  "background_color": "black",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "assets/icons/apple-touch-icon-57x57.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "img/favicon/favicon-96x96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "img/favicon/mstile-144x144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "img/favicon/favicon-196x196.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/?utm_source=launcher"
+}

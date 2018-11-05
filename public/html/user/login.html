@@ -1,7 +1,7 @@
 <div id="loginScreen" class="compact_small">
 	<div class="grid_6">
 		<div class="preLogin">
-			<img class="sflLogo" src="../img/SFL-logo.png">
+			<img class="sflLogo" src="../img/SFL-logo.png" style="display: none;">
 		</div>
 		<div class="wally" style="display: none;">
 			<img src="../img/wally_small.png">
@@ -64,5 +64,9 @@ $(document).keypress(function(event) {
 		localLogin();
 	}
 });
+
+$(".sflLogo").on('load', function() { 
+	$(this).fadeIn(1000);
+})
 
 </script>
