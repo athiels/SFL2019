@@ -1,8 +1,8 @@
 {
   "short_name": "SFL 2019",
   "name": "Sing for Life 2019",
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#303030",
+  "background_color": "#303030",
   "display": "fullscreen",
   "icons": [
     {
@@ -31,5 +31,5 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "./index.html"
+  "start_url": "/"
 }
