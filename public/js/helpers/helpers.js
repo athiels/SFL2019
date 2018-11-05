@@ -87,14 +87,18 @@ function confirm(title, msg, confirm, cancel) {
 	return false;
 }
 
-function alert(msg, img, cb) {
-	var alert = $.alert({
+function alert(msg, title, btnText, cb) {
+	var alert = $.confirm({
 		theme: 'supervan',
-	    title: img || " ",
+	    title: title || " ",
 	    content: msg,
-	    confirm: function(){
-	        if (cb) cb();
-	    },
+	    buttons: [{ 
+	    	text: btnText,
+	    	action: function() { 
+        		if (cb) cb();
+        		alert.close();
+	    	}
+	    }],	   
 	    onContentReady: function () {
 	        $(document).keypress(function(event) {
 				var keycode = (event.keyCode ? event.keyCode : event.which);

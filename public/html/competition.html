@@ -1,23 +1,23 @@
 <div id="competition" class="compact_small headerSpace">
 	<h1 class="containerTitle">SFL Competitie</h1>
 
-	<div class="grid_8"  >
+	<div class="grid_7"  >
 		<div class="newArtist">
 			<h2>
 				Artiesten			
 				<button onclick="loadContent('competition_new')" class="button_highlight right" style="margin-top: -5px; display: none">Nieuwe artiest toevoegen</button>
 			</h2>
 			<p>
-				Zoek alle 18 artiesten in de <a class="highlight" href="../img/puzzel.jpg" target="_blank">puzzel</a> en verdien punten!<br>Klik op een naam om het puzzelstukje in te geven.<br><br>	
+				Zoek alle 18 artiesten in de <a class="highlight" href="../img/puzzel.jpg" target="_blank">puzzel</a> en verdien punten!<br><span class="highlight link" onclick="showCompetitionRules();">Lees hier alle spelregels!</span><br><br><br>	
 			</p>
 			<div id="artistsList"></div>
 		</div>
 	</div>
 
-	<div class="grid_4">
+	<div class="grid_5">
 		<h2>Rangschikking</h2>
 		<p>
-			De laatste drie zijn verplicht een liedje te zingen op ons SFL podium!<br><br>	
+			Bekijk hoeveel artiesten de andere spelers al gevonden hebben. Jullie vonden <span id="userFoundArtistsLeadingText"></span> <span id="userFoundArtists"></span> en scoren daarmee <span id="userScore"></span>.<br><br>	
 		</p>
 		<div id="highscores"></div>
 	</div>
@@ -35,8 +35,6 @@ function getArtists() {
 		if (data.user) {
 			if (data.user.artists.length) {
 				createFoundArtistsHtml(data.user.artists);
-			} else {
-				$("#foundArtistsList").html("<p><br><br>Er zijn nog geen artiesten gevonden...<br><br>Heb jij een artiest gevonden op onze puzzel? <br>Klik dan op 'Nieuwe artiest toevoegen'");
 			}
 		}
 	});	
@@ -54,8 +52,11 @@ function createFoundArtistsHtml(artists) {
 		html += '<div class="grid_6';
 		if (artists[i].square == "") html += ' comp_artist';
 		html += '" data-name="'+artists[i].artist_name+'" onclick="'+action+'">';
-		html += '<span style="width: 60px; display: inline-block;">'
-		if (artists[i].square) html += '<i class="fas fa-check"></i>';
+		html += '<span style="width: 50px; display: inline-block;">'
+		if (artists[i].square) {
+			var score = (4 - parseInt(artists[i].tries));
+			html += '<div class="comp_tries"><i class="fas fa-check"></i> <span>' + score + '</span></div>';
+		}
 		html += '</span>';
 		html += '<span>'+artists[i].artist_name+'<br><br></span>';
 		html += '</div>';
@@ -102,6 +103,9 @@ function getArtistSquare(artistName) {
 	});
 }
 
+alertButtonTextsSuccess = ["OK", "TOP", "Nice", "Bangelijk", "Zalig", "Yeeeeeees", "Booeyyaa", "Te gek", "Amai", "Nailed it"];
+alertButtonTextsFailed = ["Damn", "Neeeeee", "Dju, toch", "Pfff", "Allez", "Ok", "Zeeeeeg"];
+
 function submitArtistSquare(artistName, square) {
 	var json = {
     	"logincode": user.logincode,
@@ -119,10 +123,10 @@ function submitArtistSquare(artistName, square) {
 	.done(function(data) {		
 		if (data.success) {
 			getArtists();
-			getHighscores();
-			alert(data.msg, '<img class="alertImg" src="../img/artists/'+artistName+'.png">');
+			getFoundArtists();
+			alert(data.msg, '<img class="alertImg" src="../img/artists/'+artistName+'.png">', alertButtonTextsSuccess[gri(9)] + "!");
 		} else {
-			alert(data.err);
+			alert(data.err, "", alertButtonTextsFailed[gri(7)] + "...");
 		}
 	})
 	.fail(function() {
@@ -130,19 +134,19 @@ function submitArtistSquare(artistName, square) {
 	});
 }
 
-function getHighscores() {
-	$.getJSON( "/api/artist/highscores", function( data ) {	
+function getFoundArtists() {
+	$.getJSON( "/api/artist/foundartists?logincode="+user.logincode, function( data ) {	
 		if (data.err) addNotification(err, "failed");
 		if (data.highscores) {
-			createHighscoresHtml(data.highscores);
+			createHighscoresHtml(data.highscores, data.userscore);
 		}
 	});	
 }
-getHighscores();
+getFoundArtists();
 
 var isShowAllHighscores = false;
 
-function createHighscoresHtml(highscores) {
+function createHighscoresHtml(highscores, userscore) {
 
 	var splitindex = 5;
 
@@ -156,7 +160,10 @@ function createHighscoresHtml(highscores) {
 
 		var cl = "";
 		if (i >= highscores.length-3) cl = "degradation";
-		if (highscores[i][0] == user.name) cl = "blue";
+		if (highscores[i][0] == user.name) { 
+			cl = "blue";
+			var userFoundArtists = highscores[i][1];
+		}
 		var html = '<p class="'+cl+'"';
 
 		if (!isShowAllHighscores && i > (splitindex-1) && i < highscores.length-3) {
@@ -169,6 +176,15 @@ function createHighscoresHtml(highscores) {
 		html += '</p>';
 		$("#highscores").append(html);
 	}
+
+	if (!userFoundArtists) $("#userFoundArtistsLeadingText").text("er nog geen");
+	else if (userFoundArtists == "18") $("#userFoundArtistsLeadingText").text("alle");
+	else {
+		$("#userFoundArtistsLeadingText").text("er tot hiertoe");
+		$("#userFoundArtists").text(userFoundArtists);
+	}
+	if (userscore == 1) $("#userScore").text("1 punt");
+	else $("#userScore").text(userscore + " punten");
 }
 
 
@@ -177,4 +193,21 @@ function showAllHighscores() {
 	$("#highscores p").show(500);
 	$("#highscoresShowMore").hide(500);
 }
+
+function showCompetitionRules() {
+	var stringData = $.ajax({
+        url: "html/competition_rules.html",
+        async: false
+    }).responseText;
+	alert(stringData, "Competitie spelregels", "Ok, begrepen!", rulesSeen);
+}
+
+function rulesSeen() {
+	setCookie("seenRules", true);	
+}
+
+if (!getCookie("seenRules")) {
+	showCompetitionRules();
+}
+
 </script>

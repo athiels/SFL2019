@@ -46,8 +46,12 @@ function createUserHtml(user) {
 		else compHtml += 'Nog niet gevonden';
 		compHtml += '</span></p>';
 
-		var score = (4-parseInt(user.artists[i].tries));
-		if (score < 0) score = 0;
+		var score = 0;
+		if (parseInt(user.artists[i].tries)) {
+			score = (4-parseInt(user.artists[i].tries));
+			if (score < 1) score = 1;
+		}
+		
 		totalScore += score;
 	}
 
@@ -103,10 +107,11 @@ function createCompetitionChart(user) {
 	    options: {
 	        scales: {
 	            yAxes: [{
-	                ticks: {
-	                    beginAtZero:true
-	                }
+	                display: false
 	            }]
+	        },
+	        legend: {
+	           	display: false
 	        }
 	    }
 	});

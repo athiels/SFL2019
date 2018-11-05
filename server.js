@@ -72,6 +72,10 @@ app.get('/api/artist/highscores', function(req, res) {
 	artist.highscores(req, res);
 });
 
+app.get('/api/artist/foundartists', function(req, res) {
+	artist.foundartists(req, res);
+});
+
 function uploadUsers() {
 	var importedUsers = Array();
 	fs.readFile('public/users.csv', 'utf8', function(err, data) {

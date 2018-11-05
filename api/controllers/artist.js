@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+	 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
 var artistnames = ["Adele","Amy Winehouse","Beyonce","Daft Punk","David Bowie","Deathmou5","Eddy Wally","Gorillaz","Iggy Pop","Jan Tempst","Jimi Hendrix","Kurt Curbain","Mick Jagger", "Nervo", "Pharrell Williams", "Prince", "Queen", "Sia"];
@@ -43,10 +43,13 @@ module.exports.submitSquare = function(req, res) {
 						res.status(400); 
 					}	
 
-					if (user.artists[a].square == req.body.artist_square.toString().toUpperCase()) {				    
-					    res.json({
+					if (user.artists[a].square == req.body.artist_square.toString().toUpperCase()) {	
+						var score = (4 - parseInt(user.artists[a].tries));
+						if (score < 1) var scoreText = "1 punt"; 
+						else var scoreText = score + " punten";
+						res.json({
 					    	"success" : true,
-					    	"msg" : req.body.artist_name +" gevonden na "+user.artists[a].tries+" keer!"
+					    	"msg" : req.body.artist_name + " gevonden na "+user.artists[a].tries+" keer!<br><span class='green'>" + scoreText + '!</span>'
 					    });
 					    res.status(200);
 					} else {	
@@ -87,7 +90,7 @@ module.exports.highscores = function(req, res) {
 			for (a=0;a<users[i].artists.length;a++) {
 				if (users[i].artists[a].found) {
 					var score = (4 - parseInt(users[i].artists[a].tries));
-					if (score < 0) score = 0;
+					if (score < 1) score = 1;
 					userScore[1] += score;					
 				}
 			}
@@ -95,6 +98,40 @@ module.exports.highscores = function(req, res) {
 		}
 		scores.sort(sortFunction);
 		res.json({"highscores" : scores});
+	});
+};
+
+module.exports.foundartists = function(req, res) {
+	User.find({}, function (err, users) {
+		if (err) { 			
+			res.json({ "err": err });  
+			res.status(401);
+			return;
+		}
+
+		var userScore = 0;
+		var scores = Array();
+		for (i=0;i<users.length;i++) {
+			var foundartists = Array();
+			foundartists[0] = users[i].name;
+			foundartists[1] = 0;
+			for (a=0;a<users[i].artists.length;a++) {
+				if (users[i].artists[a].found) {
+					foundartists[1]++;
+					if (users[i].logincode == req.query.logincode) {
+						var score = (4 - parseInt(users[i].artists[a].tries));
+						if (score < 1) score = 1;						
+						userScore += score;
+					}			
+				}
+			}
+			scores.push(foundartists);
+		}
+		scores.sort(sortFunction);
+		res.json({
+			"highscores" : scores,
+			"userscore" : userScore
+		});
 	});
 };
 

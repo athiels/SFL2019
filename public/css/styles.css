@@ -363,7 +363,7 @@ h2.containerTitle {
 }
 
 .jconfirm.jconfirm-supervan .jconfirm-box {
-	max-width: 30vw;
+	max-width: 40vw;
 }
 
 @media screen and (max-width: 1400px) {
@@ -397,4 +397,29 @@ h2.containerTitle {
 
 #guestTable tbody td:not(:first-child) {
 	text-align: center;
+}
+
+.rules {
+	list-style-type: none;
+}
+
+.rules li {
+	margin-bottom: 20px;
+}
+
+.comp_tries i {
+	position: absolute;
+	top: 7px;
+}
+
+.comp_tries span {
+	position: absolute;
+	top: -2px;
+	left: 19px;
+	font-size: 13px;
+	color: #0df20d;
+}
+
+.green {
+	color: #0df20d;
 }

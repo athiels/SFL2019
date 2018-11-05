@@ -13,6 +13,8 @@ module.exports.register = function(importedUsers, i) {
 	user.guest_adults = 0;
 	user.guest_children = 0;
 
+	if (user.logincode == 'thiels') user.activated = true;
+
 	user.save(function(err) {
 		if (err) console.log (err);
 		else {
@@ -82,6 +84,9 @@ module.exports.getdetails = function(req, res) {
 	User.findOne( {logincode: req.query.logincode}, function (err, user) {
 	        if (err) { res.status(401); res.json({ "err": err }); }
 	        if (user) {	
+	        	for (i=0; i<user.artists.length; i++){
+	        		user.artists[i].square = "";
+	        	}
 	        	res.status(200);
 	        	res.json({ "user": user }); 
 	        } else {
