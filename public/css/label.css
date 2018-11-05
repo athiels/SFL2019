@@ -39,7 +39,7 @@ hr {
 }
 
 body {
-	margin: 0px 10px;
+	margin: 0px;	
 	font-family: var(--defaultFontFamily);	
 	background-color: black;
 	background: url(../img/background.jpg) no-repeat center center fixed; 
@@ -58,6 +58,7 @@ h1, h2, h3, h4 {
 
 #content {
 	min-height: 80vh;
+	padding: 0px 10px;
 }
 
 header {
