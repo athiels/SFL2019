@@ -471,3 +471,6 @@ footer .fa {
 	padding: 3px 10px;
 }
 
+.notVisable {
+	visibility: none;
+}
