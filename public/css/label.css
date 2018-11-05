@@ -39,7 +39,7 @@ hr {
 }
 
 body {
-	margin: 0px;
+	margin: 0px 10px;
 	font-family: var(--defaultFontFamily);	
 	background-color: black;
 	background: url(../img/background.jpg) no-repeat center center fixed; 
@@ -458,7 +458,7 @@ table#labels tr.labelStatus-92 td:first-child {
 }
 
 .link {
-	color: var(--orange);
+	color: var(--highlightcolor);
 }
 
 .link:hover {

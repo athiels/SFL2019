@@ -21,9 +21,14 @@
       "sizes": "144x144"
     },
     {
-      "src": "img/favicon/favicon-196x196.png",
+      "src": "img/favicon/manif_192x192.png",
       "type": "image/png",
-      "sizes": "196x196"
+      "sizes": "192x192"
+    },
+    {
+      "src": "img/favicon/manif_512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": "./index.html"
