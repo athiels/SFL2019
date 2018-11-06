@@ -36,6 +36,7 @@ $("#login").keyup(function() {
     if($(this).val().length == 6) {
         preLogin($(this).val().toLowerCase(), function(data) {
         	if (data.name) {      		
+        		displayNotification("Hey " + data.name, "Welkom op de site van SFL", "../img/SFL-logo_round.png");
         		$("#username").text(data.name);
 	        	$(".preLogin").fadeOut(500, function() {
 	        		clearNotifications();
