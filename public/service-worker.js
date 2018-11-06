@@ -5,7 +5,7 @@ self.addEventListener('install', function(event) {
         [
         '/img/background.jpg',
         '/img/SFL-logo.png',
-        'index.html'
+        './index.html'
         ]
         );
     })
