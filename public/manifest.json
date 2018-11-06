@@ -4,6 +4,7 @@
   "theme_color": "#303030",
   "background_color": "#303030",
   "display": "fullscreen",
+  "start_url": "index.html",
   "icons": [
     {
       "src": "img/favicon/apple-touch-icon-57x57.png",
@@ -30,6 +31,5 @@
       "type": "image/png",
       "sizes": "512x512"
     }
-  ],
-  "start_url": "/"
+  ]
 }
