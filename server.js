@@ -32,6 +32,10 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+app.get('/puzzel', function(req, res) {
+    res.sendFile(path.join(__dirname + '/public/html/puzzel.html'));
+});
+
 app.get('/api/user/prelogin', function(req, res) {
 	auth.prelogin(req, res);
 });
@@ -90,3 +94,4 @@ function uploadUsers() {
 }
 //uploadUsers();
 
+ 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="theme-color" content="#303030"/>
+
+	<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Abel|Krub|Maven+Pro|Open+Sans+Condensed:300" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/jquery-confirm.css"/>
+ 	<script type="text/javascript" src="js/general/jquery-confirm.js"></script>
+
+ 	<script type="text/javascript" src="js/general/dragscroll.js"></script>
+ 	<link rel="stylesheet" type="text/css" href="css/pace.css">	
+
+	<link href="https://fonts.googleapis.com/css?family=Kodchasan" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">	
+</head>
+
+<body>
+	<div class="dragscroll" style="width: 100vw; height: 100vh; overflow: scroll; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;">
+		<img src="img/puzzel_online.jpg" style="display: none;">
+	</div>
+</body>
+
+<script>
+	paceOptions = {
+	  elements: {
+	    selectors: ['img']
+	  }
+	}
+</script>
+<script type="text/javascript" src="js/general/pace.min.js"></script>
+<script type="text/javascript">
+	Pace.on('done', function() {
+		$("img").fadeIn(1000);
+	});
+</script>
+</html>
+

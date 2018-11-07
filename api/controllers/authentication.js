@@ -34,7 +34,7 @@ module.exports.prelogin = function(req, res) {
         		res.json({ "name": user.name });  
         		res.status(200);  
         	} else {
-        		res.json({ "err": "Account nog niet geactiveerd. <br>Gelieve eerst de puzzel te maken en dan een foto naar het SFL team te sturen." });
+        		res.json({ "err": "Account nog niet geactiveerd. <br>Gelieve eerst de puzzel te maken en dan een foto naar het SFL-Team te sturen." });
         		res.status(401);
         	}  	
         	    

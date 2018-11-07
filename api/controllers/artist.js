@@ -31,7 +31,7 @@ module.exports.submitSquare = function(req, res) {
 		}
 		for (a=0;a<user.artists.length;a++) {
 			if (user.artists[a].artist_name == req.body.artist_name) {
-				if (user.artists[a].square == req.body.artist_square.toString().toUpperCase()) {
+				if ( user.artists[a].square.split(",").indexOf( req.body.artist_square.toString().toUpperCase() ) > -1 ) {	
 					user.artists[a].found = true;
 				}
 				user.artists[a].tries = parseInt(user.artists[a].tries)+1;
@@ -43,7 +43,7 @@ module.exports.submitSquare = function(req, res) {
 						res.status(400); 
 					}	
 
-					if (user.artists[a].square == req.body.artist_square.toString().toUpperCase()) {	
+					if ( user.artists[a].square.split(",").indexOf( req.body.artist_square.toString().toUpperCase() ) > -1 ) {	
 						var score = (4 - parseInt(user.artists[a].tries));
 						if (score < 1) var scoreText = "1 punt"; 
 						else var scoreText = score + " punten";
