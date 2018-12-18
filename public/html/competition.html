@@ -134,6 +134,7 @@ function submitArtistSquare(artistName, square) {
 		}
 	})
 	.fail(function() {
+		loadingScreen_hide();
 		addNotification(data.err, "fail");
 	});
 }

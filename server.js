@@ -94,4 +94,39 @@ function uploadUsers() {
 }
 //uploadUsers();
 
- 
+
+
+// var User = mongoose.model('User');
+
+// User.find({}, function (err, users) {
+// 	logincodes = Array();
+// 	for(a=0;a<users.length;a++) {
+// 		logincodes.push(users[a].logincode);
+// 	}
+// 	newSquare(logincodes, 0);	
+// });
+
+// function newSquare(logincodes, i) {
+// 	if (i<logincodes.length) {
+// 		User.findOne({"logincode": logincodes[i]}, function (err, user) {
+// 			if (user) {
+// 				for(a=0;a<user.artists.length;a++) {
+// 					if (user.artists[a].artist_name == "Iggy Pop") {
+// 						user.artists[a].square = "D8";		
+// 						console.log(user.artists[a].square);			
+// 					}
+// 				}
+// 				user.markModified('artists') 
+// 				user.save(function(err) {
+// 					if (err) console.log (err);
+// 					else {
+// 						console.log("Gebruiker "+user.name+" succesvol geupdated.");
+// 						newSquare(logincodes, ++i);
+// 					}
+// 				});
+// 			}
+// 		});
+// 	} else {
+// 		console.log("Klaar");
+// 	}
+// }

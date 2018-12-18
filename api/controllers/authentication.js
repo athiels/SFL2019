@@ -13,7 +13,8 @@ module.exports.register = function(importedUsers, i) {
 	user.guest_adults = 0;
 	user.guest_children = 0;
 
-	if (user.logincode == 'thiels') user.activated = true;
+	//if (user.logincode == 'thiels') 
+	user.activated = true;
 
 	user.save(function(err) {
 		if (err) console.log (err);
