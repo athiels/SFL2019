@@ -423,3 +423,27 @@ h2.containerTitle {
 .green {
 	color: #0df20d;
 }
+
+#loading_screen {
+	z-index: 1000000;
+	height: 100%;
+    width: 100%;
+    position: fixed; 
+    left: 0;
+    top: 0;
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.75);
+    overflow-x: hidden;
+    transition: 1.5s; 		
+}
+
+#loading_screen .loading_screen_content {
+	font-size: 25px;
+	margin: 10% auto;
+	max-width: 600px;
+	text-align: center;
+}
+
+#loading_screen svg {
+	font-size: 100px;
+}
