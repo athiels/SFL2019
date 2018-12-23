@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-const port = process.env.VT_PORT || 80;
+const port = process.env.PORT || 5000;
 const server = app.listen(port);
 console.log("App is listening on port "+port);
 server.timeout = 1000 * 60 * 10; // 10 minutes
