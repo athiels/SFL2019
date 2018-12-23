@@ -17,6 +17,8 @@ const server = app.listen(port);
 console.log("App is listening on port "+port);
 server.timeout = 1000 * 60 * 10; // 10 minutes
 
+mongoose.set('useFindAndModify', false);
+
 // Database config
 try {
 	console.log('Connecting to mongodb://'+process.env.SFL_DB_USERNAME+':'+process.env.SFL_DB_PASSWORD+'@ds141872.mlab.com:41872/sfl19');
