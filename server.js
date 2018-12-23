@@ -19,14 +19,18 @@ server.timeout = 1000 * 60 * 10; // 10 minutes
 
 // Database config
 console.log('mongodb://'+process.env.SFL_DB_USERNAME+':'+process.env.SFL_DB_PASSWORD+'@ds141872.mlab.com:41872/sfl19');
-mongoose.connect('mongodb://'+process.env.SFL_DB_USERNAME+':'+process.env.SFL_DB_PASSWORD+'@ds141872.mlab.com:41872/sfl19', { useNewUrlParser: true });
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-    console.log("Connected to Database");
-    console.log("Server started.");
+try {
+	mongoose.connect('mongodb://'+process.env.SFL_DB_USERNAME+':'+process.env.SFL_DB_PASSWORD+'@ds141872.mlab.com:41872/sfl19', { useNewUrlParser: true });
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
+	db.once('open', function () {
+	    console.log("Connected to Database");
+	    console.log("Server started.");
+	});
+} catch(err) {
+	console.log(err);
+}
 
-});
 
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
@@ -111,8 +115,8 @@ function uploadUsers() {
 // 		User.findOne({"logincode": logincodes[i]}, function (err, user) {
 // 			if (user) {
 // 				for(a=0;a<user.artists.length;a++) {
-// 					if (user.artists[a].artist_name == "Iggy Pop") {
-// 						user.artists[a].square = "D8";		
+// 					if (user.artists[a].artist_name == "Kurt Curbain") {
+// 						user.artists[a].artist_name = "Kurt Cobain";		
 // 						console.log(user.artists[a].square);			
 // 					}
 // 				}
