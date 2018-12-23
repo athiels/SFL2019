@@ -18,8 +18,8 @@ console.log("App is listening on port "+port);
 server.timeout = 1000 * 60 * 10; // 10 minutes
 
 // Database config
-console.log('mongodb://'+process.env.SFL_DB_USERNAME+':'+process.env.SFL_DB_PASSWORD+'@ds141872.mlab.com:41872/sfl19');
 try {
+	console.log('Connecting to mongodb://'+process.env.SFL_DB_USERNAME+':'+process.env.SFL_DB_PASSWORD+'@ds141872.mlab.com:41872/sfl19');
 	mongoose.connect('mongodb://'+process.env.SFL_DB_USERNAME+':'+process.env.SFL_DB_PASSWORD+'@ds141872.mlab.com:41872/sfl19', { useNewUrlParser: true });
 	var db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
