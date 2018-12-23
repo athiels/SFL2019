@@ -35,11 +35,11 @@ try {
 
 
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile('/index.html');
 });
 
 app.get('/puzzel', function(req, res) {
-    res.sendFile(path.join(__dirname + '/public/html/puzzel.html'));
+    res.sendFile('/public/html/puzzel.html');
 });
 
 app.get('/api/user/prelogin', function(req, res) {
