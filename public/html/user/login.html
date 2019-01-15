@@ -10,6 +10,8 @@
 	<div class="grid_6 loginInputFields">
 		<div class="preLogin">
 			<input type="text" id="login" name="login" placeholder="Login code" autofocus>
+			<br><br>
+			<button onclick="pressPreloginButton()" class="button_highlight stretch">Volgende</button>
 		</div>
 
 		<div class="wally" style="display: none;">
@@ -36,7 +38,6 @@ $("#login").keyup(function() {
     if($(this).val().length == 6) {
         preLogin($(this).val().toLowerCase(), function(data) {
         	if (data.name) {      		
-        		displayNotification("Hey " + data.name, "Welkom op de site van SFL", "../img/SFL-logo_round.png");
         		$("#username").text(data.name);
 	        	$(".preLogin").fadeOut(500, function() {
 	        		clearNotifications();
@@ -49,6 +50,21 @@ $("#login").keyup(function() {
         });
     }
 });
+
+function pressPreloginButton() {
+	preLogin($("#login").val().toLowerCase(), function(data) {
+    	if (data.name) {      		
+    		$("#username").text(data.name);
+        	$(".preLogin").fadeOut(500, function() {
+        		clearNotifications();
+        		$(".loginInputFields").removeClass("loginInputFields").addClass("loginInputFields-2");
+        		$(".wally").fadeIn(500);	
+        	});	        	        
+    	} else {
+    		addNotification(data.err);
+    	}        	
+    });
+}
 
 
 function localLogin() {
