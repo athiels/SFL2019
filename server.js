@@ -39,7 +39,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/puzzel', function(req, res) {
-    res.sendFile('/public/html/puzzel.html');
+    res.sendFile(path.join(__dirname + '/public/html/puzzel.html'));
 });
 
 app.get('/api/user/prelogin', function(req, res) {
